@@ -11,7 +11,23 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $projects = \App\Models\Project::where('mahasiswa_name', auth()->user()->name)->get();
+        $query = \App\Models\Project::where('mahasiswa_name', auth()->user()->name);
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+
+        $projects = $query->paginate(10);
+
         return view('mahasiswa.index', compact('projects'));
     }
 

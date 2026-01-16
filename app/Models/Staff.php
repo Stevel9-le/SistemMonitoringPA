@@ -11,6 +11,7 @@ class Staff extends Model
         'role',
         'email',
         'user_id',
+        'profile_picture',
     ];
 
     public function user()

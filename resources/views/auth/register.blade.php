@@ -4,154 +4,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Monitoring PA</title>
+    <title>Sistem Monitoring PA - Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets-admin/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets-admin/vendors/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets-admin/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets-admin/css/pages/auth.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+            font-family: 'Nunito', sans-serif;
+        }
+        .register-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .register-title {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #1976d2;
+        }
+        .register-subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
+        .btn-primary:hover {
+            background-color: #1565c0;
+            border-color: #1565c0;
+        }
+        .text-center a {
+            color: #1976d2;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="auth">
+    <div class="register-container">
+        <h1 class="register-title">Sistem Monitoring PA</h1>
+        <p class="register-subtitle">Create Account for Final Project System</p>
 
-        <div class="row h-100">
-            <div class="col-lg-5 col-12">
-                <div id="auth-left">
-                    <div class="auth-logo">
-                        <a href="{{ route('home') }}"><img src="{{ asset('assets-admin/images/logo/logo.png') }}" alt="Logo"></a>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+
+            <div class="form-group">
+                <input type="text" class="form-control @error('name') is-invalid @enderror"
+                       name="name" value="{{ old('name') }}" placeholder="Full Name" required autocomplete="name" autofocus>
+                @error('name')
+                    <div class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
                     </div>
-                    <h1 class="auth-title">Sign Up</h1>
-                    <p class="auth-subtitle mb-5">Create your account to get started.</p>
+                @enderror
+            </div>
 
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl @error('name') is-invalid @enderror"
-                                   name="name" value="{{ old('name') }}" placeholder="Full Name" required autocomplete="name" autofocus>
-                            <div class="form-control-icon">
-                                <i class="bi bi-person"></i>
-                            </div>
-                            @error('name')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="email" class="form-control form-control-xl @error('email') is-invalid @enderror"
-                                   name="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
-                            <div class="form-control-icon">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                            @error('email')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl @error('password') is-invalid @enderror"
-                                   name="password" placeholder="Password" required autocomplete="new-password">
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                            @error('password')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl"
-                                   name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-check"></i>
-                            </div>
-                        </div>
-
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <select class="form-control form-control-xl @error('role') is-invalid @enderror" name="role" required>
-                                <option value="">Select Role</option>
-                                <option value="mahasiswa">Mahasiswa (Student)</option>
-                                <option value="staff">Staff</option>
-                            </select>
-                            <div class="form-control-icon">
-                                <i class="bi bi-person-badge"></i>
-                            </div>
-                            @error('role')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div id="student-fields" style="display: none;">
-                            <div class="form-group position-relative has-icon-left mb-4">
-                                <input type="text" class="form-control form-control-xl @error('student_id') is-invalid @enderror"
-                                       name="student_id" value="{{ old('student_id') }}" placeholder="Student ID">
-                                <div class="form-control-icon">
-                                    <i class="bi bi-card-text"></i>
-                                </div>
-                                @error('student_id')
-                                    <div class="invalid-feedback d-block">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group position-relative has-icon-left mb-4">
-                                <select class="form-control form-control-xl @error('department') is-invalid @enderror" name="department" id="department">
-                                    <option value="">Select Department</option>
-                                    <option value="Teknologi Informasi" {{ old('department') == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
-                                    <option value="Teknologi Industri" {{ old('department') == 'Teknologi Industri' ? 'selected' : '' }}>Teknologi Industri</option>
-                                    <option value="Bisnis dan Komunikasi" {{ old('department') == 'Bisnis dan Komunikasi' ? 'selected' : '' }}>Bisnis dan Komunikasi</option>
-                                </select>
-                                <div class="form-control-icon">
-                                    <i class="bi bi-building"></i>
-                                </div>
-                                @error('department')
-                                    <div class="invalid-feedback d-block">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group position-relative has-icon-left mb-4">
-                                <select class="form-control form-control-xl @error('study_program') is-invalid @enderror" name="study_program" id="study_program">
-                                    <option value="">Select Study Program</option>
-                                </select>
-                                <div class="form-control-icon">
-                                    <i class="bi bi-book"></i>
-                                </div>
-                                @error('study_program')
-                                    <div class="invalid-feedback d-block">
-                                        <strong>{{ $message }}</strong>
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Sign Up</button>
-                    </form>
-
-                    <div class="text-center mt-5 text-lg fs-4">
-                        <p class="text-gray-600">Already have an accountaa? <a href="{{ route('login') }}" class="font-bold">Log in</a>.</p>
+            <div class="form-group">
+                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                       name="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
+                @error('email')
+                    <div class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
                     </div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                       name="password" placeholder="Password" required autocomplete="new-password">
+                @error('password')
+                    <div class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control"
+                       name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <select class="form-control @error('role') is-invalid @enderror" name="role" required>
+                    <option value="">Select Role</option>
+                    <option value="mahasiswa">Mahasiswa (Student)</option>
+                    <option value="staff">Staff</option>
+                </select>
+                @error('role')
+                    <div class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @enderror
+            </div>
+
+            <div id="student-fields" style="display: none;">
+                <div class="form-group">
+                    <input type="text" class="form-control @error('student_id') is-invalid @enderror"
+                           name="student_id" value="{{ old('student_id') }}" placeholder="Student ID">
+                    @error('student_id')
+                        <div class="invalid-feedback">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control @error('department') is-invalid @enderror" name="department" id="department">
+                        <option value="">Select Department</option>
+                        <option value="Teknologi Informasi" {{ old('department') == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
+                        <option value="Teknologi Industri" {{ old('department') == 'Teknologi Industri' ? 'selected' : '' }}>Teknologi Industri</option>
+                        <option value="Bisnis dan Komunikasi" {{ old('department') == 'Bisnis dan Komunikasi' ? 'selected' : '' }}>Bisnis dan Komunikasi</option>
+                    </select>
+                    @error('department')
+                        <div class="invalid-feedback">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control @error('study_program') is-invalid @enderror" name="study_program" id="study_program">
+                        <option value="">Select Study Program</option>
+                    </select>
+                    @error('study_program')
+                        <div class="invalid-feedback">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    @enderror
                 </div>
             </div>
 
-            <div class="col-lg-7 d-none d-lg-block">
-                <div id="auth-right">
-                </div>
-            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100">Sign Up</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Already have an account? <a href="{{ route('login') }}">Log in</a>.</p>
         </div>
-
     </div>
 
     <script>

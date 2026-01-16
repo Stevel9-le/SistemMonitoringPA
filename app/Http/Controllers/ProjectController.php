@@ -15,19 +15,34 @@ class ProjectController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $query = Project::with('assignedStaff');
 
         if ($user->hasRole('staff')) {
             // Get staff record for the user
             $staff = $user->staff;
             if ($staff) {
-                $projects = Project::with('assignedStaff')->where('assigned_staff_id', $staff->id)->get();
+                $query->where('assigned_staff_id', $staff->id);
             } else {
-                $projects = collect(); // Empty collection if no staff record
+                $query->whereRaw('1 = 0'); // No projects if no staff record
             }
-        } else {
-            // Admin or other roles see all projects
-            $projects = Project::with('assignedStaff')->get();
         }
+        // Admin or other roles see all projects (no additional where)
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('mahasiswa_name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+
+        $projects = $query->paginate(10);
 
         return view('admin.projects.index', compact('projects'));
     }

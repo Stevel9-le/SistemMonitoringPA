@@ -28,9 +28,32 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <!-- Search and Filter Form -->
+                <form method="GET" action="{{ route('admin.reports.project-status') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" name="search" class="form-control" placeholder="Search by title, mahasiswa name, or description" value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <a href="{{ route('admin.reports.project-status') }}" class="btn btn-secondary">Reset</a>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Status</th>
@@ -42,6 +65,7 @@
                     <tbody>
                         @forelse($projects as $project)
                             <tr>
+                                <td>{{ $projects->firstItem() + $loop->index }}</td>
                                 <td>{{ $project->title }}</td>
                                 <td>{{ Str::limit($project->description, 50) }}</td>
                                 <td>
@@ -60,21 +84,16 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">No projects found.</td>
+                                <td colspan="7" class="text-center">No projects found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+
+                <!-- Pagination -->
+                {{ $projects->appends(request()->query())->links() }}
             </div>
         </div>
     </section>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    // Simple Datatable
-    let table1 = document.querySelector('#table1');
-    let dataTable = new simpleDatatables.DataTable(table1);
-</script>
 @endsection

@@ -47,10 +47,25 @@ class ReportController extends Controller
      */
     public function projectStatus()
     {
-        $projects = Project::with('assignedStaff')
+        $query = Project::with('assignedStaff')
             ->orderBy('status')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('mahasiswa_name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+
+        $projects = $query->paginate(10);
 
         return view('admin.reports.project-status', compact('projects'));
     }
@@ -60,10 +75,25 @@ class ReportController extends Controller
      */
     public function staffPerformance()
     {
-        $staff = Staff::with('projects')
+        $query = Staff::with('projects')
             ->withCount('projects')
-            ->orderBy('projects_count', 'desc')
-            ->get();
+            ->orderBy('projects_count', 'desc');
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('role', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by role
+        if ($role = request('role')) {
+            $query->where('role', $role);
+        }
+
+        $staff = $query->paginate(10);
 
         return view('admin.reports.staff-performance', compact('staff'));
     }

@@ -28,9 +28,26 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <!-- Search and Filter Form -->
+                <form method="GET" action="{{ route('admin.reports.staff-performance') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" name="search" class="form-control" placeholder="Search by name, role, or email" value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="role" class="form-control" placeholder="Filter by role" value="{{ request('role') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <a href="{{ route('admin.reports.staff-performance') }}" class="btn btn-secondary">Reset</a>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Total Projects</th>
@@ -43,6 +60,7 @@
                     <tbody>
                         @forelse($staff as $member)
                             <tr>
+                                <td>{{ $staff->firstItem() + $loop->index }}</td>
                                 <td>{{ $member->name }}</td>
                                 <td>{{ $member->email }}</td>
                                 <td>{{ $member->projects_count }}</td>
@@ -66,21 +84,16 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">No staff found.</td>
+                                <td colspan="8" class="text-center">No staff found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+
+                <!-- Pagination -->
+                {{ $staff->appends(request()->query())->links() }}
             </div>
         </div>
     </section>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    // Simple Datatable
-    let table1 = document.querySelector('#table1');
-    let dataTable = new simpleDatatables.DataTable(table1);
-</script>
 @endsection

@@ -16,7 +16,29 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswa = User::role('mahasiswa')->get();
+        $query = User::role('mahasiswa');
+
+        // Search
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('student_id', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by department
+        if ($department = request('department')) {
+            $query->where('department', $department);
+        }
+
+        // Filter by study_program
+        if ($study_program = request('study_program')) {
+            $query->where('study_program', $study_program);
+        }
+
+        $mahasiswa = $query->paginate(10);
+
         return view('admin.mahasiswa.index', compact('mahasiswa'));
     }
 

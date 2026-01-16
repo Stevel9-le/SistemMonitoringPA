@@ -12,20 +12,22 @@
     {{-- SIDEBAR --}}
     @include('layouts.sidebar')
 
-    <div id="main">
+    <div id="main" style="min-height: 100vh; display: flex; flex-direction: column;">
         {{-- HEADER --}}
         @include('layouts.header')
 
         {{-- CONTENT --}}
         <div class="page-heading">
-            @yield('heading')
+            <h4 class="text-muted">@yield('heading')</h4>
         </div>
 
         <div class="page-content">
             @yield('content')
         </div>
 
-        @include('layouts.footer')
+        <div style="margin-top: auto;">
+            @include('layouts.footer')
+        </div>
     </div>
 
 </div>

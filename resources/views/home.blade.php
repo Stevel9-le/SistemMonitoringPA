@@ -6,7 +6,7 @@
 </div>
 <div class="page-content">
     <section class="row">
-        <div class="col-12 col-lg-9">
+        <div class="col-12">
             <div class="row">
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
@@ -127,21 +127,6 @@
                             @else
                                 <p>No projects assigned yet.</p>
                             @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3">
-            <div class="card">
-                <div class="card-body py-4 px-5">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('assets-admin/images/faces/1.jpg') }}" alt="Profile Picture">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">{{ auth()->user()->name }}</h5>
-                            <h6 class="text-muted mb-0">@{{ auth()->user()->email }}</h6>
                         </div>
                     </div>
                 </div>

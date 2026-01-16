@@ -30,9 +30,30 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
-                <table class="table table-striped" id="table1">
+
+                <!-- Search and Filter Form -->
+                <form method="GET" action="{{ route('admin.mahasiswa.index') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" name="search" class="form-control" placeholder="Search by name, email, or student ID" value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="department" class="form-control" placeholder="Filter by department" value="{{ request('department') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="study_program" class="form-control" placeholder="Filter by study program" value="{{ request('study_program') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <a href="{{ route('admin.mahasiswa.index') }}" class="btn btn-secondary">Reset</a>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Student ID</th>
@@ -45,6 +66,7 @@
                     <tbody>
                         @forelse($mahasiswa as $student)
                             <tr>
+                                <td>{{ $mahasiswa->firstItem() + $loop->index }}</td>
                                 <td>{{ $student->name }}</td>
                                 <td>{{ $student->email }}</td>
                                 <td>{{ $student->student_id }}</td>
@@ -65,21 +87,16 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">No mahasiswa found.</td>
+                                <td colspan="8" class="text-center">No mahasiswa found.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+
+                <!-- Pagination -->
+                {{ $mahasiswa->appends(request()->query())->links() }}
             </div>
         </div>
     </section>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    // Simple Datatable
-    let table1 = document.querySelector('#table1');
-    let dataTable = new simpleDatatables.DataTable(table1);
-</script>
 @endsection
